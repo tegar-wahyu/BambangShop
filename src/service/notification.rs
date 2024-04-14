@@ -24,7 +24,7 @@ impl NotificationService {
         if result.is_none() {
             return Err(compose_error_response(
                 Status::NotFound,
-                String
+                String::from("Subscriber not found.")
             ));
         }
         return Ok(result.unwrap());
