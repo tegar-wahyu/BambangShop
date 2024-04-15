@@ -63,7 +63,7 @@ You can install Postman via this website: https://www.postman.com/downloads/
     -   [x] Commit: `Implement subscribe function in Notification controller.`
     -   [x] Commit: `Implement unsubscribe function in Notification service.`
     -   [x] Commit: `Implement unsubscribe function in Notification controller.`
-    -   [ ] Write answers of your learning module's "Reflection Publisher-2" questions in this README.
+    -   [x] Write answers of your learning module's "Reflection Publisher-2" questions in this README.
 -   **STAGE 3: Implement notification mechanism**
     -   [ ] Commit: `Implement update method in Subscriber model to send notification HTTP requests.`
     -   [ ] Commit: `Implement notify function in Notification service to notify each Subscriber.`
@@ -100,5 +100,25 @@ This is the place for you to write reflections:
 	>>Seperti yang Saya sebutkan pada nomor 2, `DashMap` adalah `HashMap` bersifat concurrent yang memungkinkan banyak thread membaca dan menulis ke Map secara aman. Penggunaan `DashMap` sebagai implementasi Singleton di `SUBSCRIBERS` dalam kasus BambangShop sudah tepat karena sudah memastikan akses `thread-safe`.
 
 #### Reflection Publisher-2
+
+1. *In the Model-View Controller (MVC) compound pattern, there is no “Service” and “Repository”. Model in MVC covers both data storage and business logic. Explain based on your understanding of design principles, why we need to separate “Service” and “Repository” from a Model?*
+
+	>>Dengan memisahkan "Service" dan "Repository", codebase menjadi lebih clean dan maintainable karena mengimplementasikan (Single Responsibility Principle).
+
+	>>"Repository" bertanggung jawab untuk menangani penyimpanan dan pengambilan data. Sedangkan "Service" bertanggung jawab untuk menerapkan business logic, menggunakan Repository untuk mendapatkan data yang diperlukan dan menyimpan hasilnya. 
+
+	>>Pemisahan ini memungkinkan setiap bagian untuk dikembangkan, diuji, dan diperbarui secara independen. Hal ini juga membuat kode lebih mudah dipahami karena setiap bagian memiliki tanggung jawab yang jelas.
+
+2. *What happens if we only use the Model? Explain your imagination on how the interactions between each model (Program, Subscriber, Notification) affect the code complexity for each model?*
+
+	>>Jika kita hanya menggunakan Model, kode dapat menjadi kompleks dan sulit untuk di-maintain. Setiap model harus menangani tidak hanya penyimpanan data, tetapi juga business logic dan manipulasi data. Hal ini dapat menyebabkan kode yang tightly coupled, di mana perubahan dalam satu model dapat memengaruhi yang lain.
+
+	>>Misalnya, jika model `Program` bertanggung jawab untuk memberi tahu `Subscriber`, setiap perubahan pada model `Subscriber` dapat memerlukan perubahan pada model `Program`. Begitu juga kalau model `Notification` bertanggung jawab untuk menyimpan notifikasi, itu juga perlu mengetahui struktur model `Program` dan `Subscriber` untuk membuat notifikasi yang sesuai.
+
+3. *Have you explored more about Postman? Tell us how this tool helps you to test your current work. You might want to also list which features in Postman you are interested in or feel like it is helpful to help your Group Project or any of your future software engineering projects.*
+
+	>>Sebelumnya Saya pertama kali menggunakan Postman untuk mata kuliah PBP, tapi pada saat itu Saya tidak banyak memanfaatkan fitur-fitur yang ada. 
+    
+    >>Setelah Saya mencoba untuk eksplor Postman pada project ini, menurut Saya Postman adalah alat yang sangat powerful untuk melakukan API Testing. Postman memungkinkan saya untuk mengirimkan request HTTP ke server dan memeriksa responnya. Hal ini sangat berguna untuk debugging dan memastikan bahwa endpoint-endpoint saya berfungsi sesuai dengan yang Saya inginkan.
 
 #### Reflection Publisher-3
