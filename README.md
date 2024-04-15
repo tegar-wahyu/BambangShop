@@ -69,7 +69,7 @@ You can install Postman via this website: https://www.postman.com/downloads/
     -   [x] Commit: `Implement notify function in Notification service to notify each Subscriber.`
     -   [x] Commit: `Implement publish function in Program service and Program controller.`
     -   [x] Commit: `Edit Product service methods to call notify after create/delete.`
-    -   [ ] Write answers of your learning module's "Reflection Publisher-3" questions in this README.
+    -   [x] Write answers of your learning module's "Reflection Publisher-3" questions in this README.
 
 ## Your Reflections
 This is the place for you to write reflections:
@@ -122,3 +122,40 @@ This is the place for you to write reflections:
     >Setelah Saya mencoba untuk eksplor Postman pada project ini, menurut Saya Postman adalah alat yang sangat powerful untuk melakukan API Testing. Postman memungkinkan saya untuk mengirimkan request HTTP ke server dan memeriksa responnya. Hal ini sangat berguna untuk debugging dan memastikan bahwa endpoint-endpoint saya berfungsi sesuai dengan yang Saya inginkan.
 
 #### Reflection Publisher-3
+
+1. Observer Pattern has two variations: Push model (publisher pushes data to subscribers) and Pull model (subscribers pull data from publisher). In this tutorial case, which variation of Observer Pattern that we use?
+
+	>Dalam kasus ini, Observer Pattern yang digunakan adalah `Push Model`. Hal ini dapat dilihat dalam method `notify` dari struct `Notification` dalam `../service/notification.rs`, di mana sebuah `Notification` dibuat dan kemudian di-push ke setiap `Subscribe` dengan memanggil method `update` dari struct `Subscriber` di `../model/subscriber.rs`.
+	>```Rust
+    >pub fn notify(&self, product_type: &str, status: &str, product: Product) {
+    >    ...
+    >    for subscriber in subscribers {
+    >        ...
+    >        thread::spawn(move || {
+    >            subscriber_clone.update(payload_clone); <-- memanggil update 
+    >        });
+    >    }
+    >}
+	>```
+	>
+
+	>Pada kode tersebut,  data yang di-push ke subscriber adalah `payload`. Subscriber tidak perlu meminta atau menarik (pull) data ini dari publisher.
+
+2. What are the advantages and disadvantages of using the other variation of Observer Pattern for this tutorial case? (example: if you answer Q1 with Push, then imagine if we used Pull)
+
+    >Jika menggunakan `Pull Model` terdapat beberapa kelebihan dan kekurangan berikut:
+    
+	>Kelebihan:
+	> - Subscriber memiliki lebih banyak kontrol atas waktu pengambilan data.
+	> - Jika update sering terjadi tetapi subscriber hanya membutuhkan data pada waktu tertentu, model Pull dapat mengurangi traffic yang tidak perlu.
+
+	>Kekurangan:
+	> - Model Pull dapat menambah kompleksitas karena subscriber perlu terus memeriksa atau meminta (pull) publisher untuk mendapatkan update.
+	> - Jika subscriber tidak melakukan update dengan sering, mereka mungkin menggunakan data yang outdated.
+	> - Pulling secara terus-menerus dapat mengonsumsi lebih banyak sumber daya, terutama jika status publisher tidak sering berubah.
+
+3. Explain what will happen to the program if we decide to not use multi-threading in the notification process.
+
+	>Jika kita tidak menggunakan multi-threading, notifikasi akan dikirim secara sinkronus, yang mana berarti setiap notifikasi dikirim satu persatu secara bergantian. Selain itu, program tidak dapat melakukan tugas lain saat menunggu notifikasi terkirim.
+
+	>Jika tidak menggunakan multi-threading, proses pengiriman notifikasi dapat memperlambat seluruh aplikasi, terutama jika ada banyak notifikasi yang harus dikirim atau jika proses mengirim satu notifikasi memakan waktu yang lama.
