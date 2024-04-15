@@ -65,7 +65,7 @@ You can install Postman via this website: https://www.postman.com/downloads/
     -   [x] Commit: `Implement unsubscribe function in Notification controller.`
     -   [x] Write answers of your learning module's "Reflection Publisher-2" questions in this README.
 -   **STAGE 3: Implement notification mechanism**
-    -   [ ] Commit: `Implement update method in Subscriber model to send notification HTTP requests.`
+    -   [x] Commit: `Implement update method in Subscriber model to send notification HTTP requests.`
     -   [ ] Commit: `Implement notify function in Notification service to notify each Subscriber.`
     -   [ ] Commit: `Implement publish function in Program service and Program controller.`
     -   [ ] Commit: `Edit Product service methods to call notify after create/delete.`
@@ -79,46 +79,46 @@ This is the place for you to write reflections:
 #### Reflection Publisher-1
 1. *In the Observer pattern diagram explained by the Head First Design Pattern book, Subscriber is defined as an interface. Explain based on your understanding of Observer design patterns, do we still need an interface (or `trait` in Rust) in this BambangShop case, or a single Model `struct` is enough?*
 
-    >>Dalam Observer design patterns, Subscriber (atau Observer) biasanya didefinisikan sebagai intercafe atau trait di Rust untuk memungkinkan beberapa concrete implementations. Hal ini memberikan fleksibilitas dan membuat kode lebih mudah untuk dikembangkan, karena dapat menambahkan jenis subscriber baru tanpa memodifikasi kode yang ada.
+    >Dalam Observer design patterns, Subscriber (atau Observer) biasanya didefinisikan sebagai intercafe atau trait di Rust untuk memungkinkan beberapa concrete implementations. Hal ini memberikan fleksibilitas dan membuat kode lebih mudah untuk dikembangkan, karena dapat menambahkan jenis subscriber baru tanpa memodifikasi kode yang ada.
 
-    >>Dalam kasus BambangShop, single Model `struct` sebenarnya sudah cukup, tapi akan lebih baik untuk mendefinisikan Subscriber sebagai trait. Hal ini karena mungkin BambangShop akan memiliki berbagai jenis subscriber sehingga masing-masing subscriber memerlukan implementasi yang berbeda dalam menangani notifikasi.
+    >Dalam kasus BambangShop, single Model `struct` sebenarnya sudah cukup, tapi akan lebih baik untuk mendefinisikan Subscriber sebagai trait. Hal ini karena mungkin BambangShop akan memiliki berbagai jenis subscriber sehingga masing-masing subscriber memerlukan implementasi yang berbeda dalam menangani notifikasi.
 
 2. *`id` in `Program` and `url` in `Subscriber` is intended to be unique. Explain based on your understanding, is using `Vec` (list) sufficient or using `DashMap` (map/dictionary) like we currently use is necessary for this case?*
 
-    >>Dalam kasus ini, menggunakan `DashMap` lebih cocok daripada `Vec` untuk menangani `id` unik di `Program` dan `url` di `Subscriber`.
+    >Dalam kasus ini, menggunakan `DashMap` lebih cocok daripada `Vec` untuk menangani `id` unik di `Program` dan `url` di `Subscriber`.
     
     >>`DashMap` adalah `HashMap` yang bersifat concurrent, yang menyediakan cara yang efisien untuk menyimpan pasangan key-value. Hal ini memungkinkan kompleksitas yang konstan yaitu O(1), untuk penambahan, penghapusan, dan pencarian berdasarkan key.
     
-    >>Sedangkan `Vec` adalah jenis array yang dapat tumbuh secara kontinu. Jika kita menggunakan `Vec` untuk memastikan keunikan, kita perlu mengiterasi seluruh daftar untuk memeriksa duplikat setiap kali menambahkan item baru. Ini menghasilkan kompleksitas O(N), yang kurang efisien daripada `DashMap`, terutama saat ukuran data tergolong besar.
+    >Sedangkan `Vec` adalah jenis array yang dapat tumbuh secara kontinu. Jika kita menggunakan `Vec` untuk memastikan keunikan, kita perlu mengiterasi seluruh daftar untuk memeriksa duplikat setiap kali menambahkan item baru. Ini menghasilkan kompleksitas O(N), yang kurang efisien daripada `DashMap`, terutama saat ukuran data tergolong besar.
     
-    >>Oleh karena itu, penggunaan `DashMap` lebih efisien untuk memastikan keunikan `id` dan `url`.
+    >Oleh karena itu, penggunaan `DashMap` lebih efisien untuk memastikan keunikan `id` dan `url`.
 
 3. *When programming using Rust, we are enforced by rigorous compiler constraints to make a thread-safe program. In the case of the List of Subscribers (`SUBSCRIBERS`) static variable, we used the `DashMap` external library for `thread safe HashMap`. Explain based on your understanding of design patterns, do we still need `DashMap` or we can implement Singleton pattern instead?*
 
-	>>Menurut pemahaman Saya, Singleton pattern menjamin suatu kelas hanya memiliki satu instance dan menyediakan titik akses global ke instance tersbut. Namun, dalam lingkungan multithreaded seperti Rust, Singleton saja tidak cukup untuk memastikan keamanan dari thread. Sehingga diperlukan sinkronisasi akses ke instance Singleton untuk mencegah situasi seperti `race condition`.
+	>Menurut pemahaman Saya, Singleton pattern menjamin suatu kelas hanya memiliki satu instance dan menyediakan titik akses global ke instance tersbut. Namun, dalam lingkungan multithreaded seperti Rust, Singleton saja tidak cukup untuk memastikan keamanan dari thread. Sehingga diperlukan sinkronisasi akses ke instance Singleton untuk mencegah situasi seperti `race condition`.
 
-	>>Seperti yang Saya sebutkan pada nomor 2, `DashMap` adalah `HashMap` bersifat concurrent yang memungkinkan banyak thread membaca dan menulis ke Map secara aman. Penggunaan `DashMap` sebagai implementasi Singleton di `SUBSCRIBERS` dalam kasus BambangShop sudah tepat karena sudah memastikan akses `thread-safe`.
+	>Seperti yang Saya sebutkan pada nomor 2, `DashMap` adalah `HashMap` bersifat concurrent yang memungkinkan banyak thread membaca dan menulis ke Map secara aman. Penggunaan `DashMap` sebagai implementasi Singleton di `SUBSCRIBERS` dalam kasus BambangShop sudah tepat karena sudah memastikan akses `thread-safe`.
 
 #### Reflection Publisher-2
 
 1. *In the Model-View Controller (MVC) compound pattern, there is no “Service” and “Repository”. Model in MVC covers both data storage and business logic. Explain based on your understanding of design principles, why we need to separate “Service” and “Repository” from a Model?*
 
-	>>Dengan memisahkan "Service" dan "Repository", codebase menjadi lebih clean dan maintainable karena mengimplementasikan (Single Responsibility Principle).
+	>Dengan memisahkan "Service" dan "Repository", codebase menjadi lebih clean dan maintainable karena mengimplementasikan (Single Responsibility Principle).
 
-	>>"Repository" bertanggung jawab untuk menangani penyimpanan dan pengambilan data. Sedangkan "Service" bertanggung jawab untuk menerapkan business logic, menggunakan Repository untuk mendapatkan data yang diperlukan dan menyimpan hasilnya. 
+	>"Repository" bertanggung jawab untuk menangani penyimpanan dan pengambilan data. Sedangkan "Service" bertanggung jawab untuk menerapkan business logic, menggunakan Repository untuk mendapatkan data yang diperlukan dan menyimpan hasilnya. 
 
-	>>Pemisahan ini memungkinkan setiap bagian untuk dikembangkan, diuji, dan diperbarui secara independen. Hal ini juga membuat kode lebih mudah dipahami karena setiap bagian memiliki tanggung jawab yang jelas.
+	>Pemisahan ini memungkinkan setiap bagian untuk dikembangkan, diuji, dan diperbarui secara independen. Hal ini juga membuat kode lebih mudah dipahami karena setiap bagian memiliki tanggung jawab yang jelas.
 
 2. *What happens if we only use the Model? Explain your imagination on how the interactions between each model (Program, Subscriber, Notification) affect the code complexity for each model?*
 
-	>>Jika kita hanya menggunakan Model, kode dapat menjadi kompleks dan sulit untuk di-maintain. Setiap model harus menangani tidak hanya penyimpanan data, tetapi juga business logic dan manipulasi data. Hal ini dapat menyebabkan kode yang tightly coupled, di mana perubahan dalam satu model dapat memengaruhi yang lain.
+	>Jika kita hanya menggunakan Model, kode dapat menjadi kompleks dan sulit untuk di-maintain. Setiap model harus menangani tidak hanya penyimpanan data, tetapi juga business logic dan manipulasi data. Hal ini dapat menyebabkan kode yang tightly coupled, di mana perubahan dalam satu model dapat memengaruhi yang lain.
 
-	>>Misalnya, jika model `Program` bertanggung jawab untuk memberi tahu `Subscriber`, setiap perubahan pada model `Subscriber` dapat memerlukan perubahan pada model `Program`. Begitu juga kalau model `Notification` bertanggung jawab untuk menyimpan notifikasi, itu juga perlu mengetahui struktur model `Program` dan `Subscriber` untuk membuat notifikasi yang sesuai.
+	>Misalnya, jika model `Program` bertanggung jawab untuk memberi tahu `Subscriber`, setiap perubahan pada model `Subscriber` dapat memerlukan perubahan pada model `Program`. Begitu juga kalau model `Notification` bertanggung jawab untuk menyimpan notifikasi, itu juga perlu mengetahui struktur model `Program` dan `Subscriber` untuk membuat notifikasi yang sesuai.
 
 3. *Have you explored more about Postman? Tell us how this tool helps you to test your current work. You might want to also list which features in Postman you are interested in or feel like it is helpful to help your Group Project or any of your future software engineering projects.*
 
-	>>Sebelumnya Saya pertama kali menggunakan Postman untuk mata kuliah PBP, tapi pada saat itu Saya tidak banyak memanfaatkan fitur-fitur yang ada. 
+	>Sebelumnya Saya pertama kali menggunakan Postman untuk mata kuliah PBP, tapi pada saat itu Saya tidak banyak memanfaatkan fitur-fitur yang ada. 
     
-    >>Setelah Saya mencoba untuk eksplor Postman pada project ini, menurut Saya Postman adalah alat yang sangat powerful untuk melakukan API Testing. Postman memungkinkan saya untuk mengirimkan request HTTP ke server dan memeriksa responnya. Hal ini sangat berguna untuk debugging dan memastikan bahwa endpoint-endpoint saya berfungsi sesuai dengan yang Saya inginkan.
+    >Setelah Saya mencoba untuk eksplor Postman pada project ini, menurut Saya Postman adalah alat yang sangat powerful untuk melakukan API Testing. Postman memungkinkan saya untuk mengirimkan request HTTP ke server dan memeriksa responnya. Hal ini sangat berguna untuk debugging dan memastikan bahwa endpoint-endpoint saya berfungsi sesuai dengan yang Saya inginkan.
 
 #### Reflection Publisher-3
